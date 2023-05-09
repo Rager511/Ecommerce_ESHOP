@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <h2>Payment Information</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="card-number">Card Number</label>
+        <input type="text" class="form-control" id="card-number" name="card_number" placeholder="Enter card number">
+      </div>
+      <div class="form-group">
+        <label for="expiration-date">Expiration Date</label>
+        <input type="text" class="form-control" id="expiration-date" name="expiration_date" placeholder="MM/YY">
+      </div>
+      <div class="form-group">
+        <label for="cvv">CVV</label>
+        <input type="text" class="form-control" id="cvv" name="cvv" placeholder="Enter CVV">
+      </div>
+      <div class="form-group">
+        <label for="card-holder-name">Cardholder Name</label>
+        <input type="text" class="form-control" id="card-holder-name" name="card_holder_name" placeholder="Enter cardholder name">
+      </div>
+      <div class="form-group">
+        <label for="billing-address">Billing Address</label>
+        <textarea class="form-control" id="billing-address" name="billing_address" rows="3" placeholder="Enter billing address"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

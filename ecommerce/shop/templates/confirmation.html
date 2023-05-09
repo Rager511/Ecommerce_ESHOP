@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <h3 class="text-dark text-center rounded p-2 bg-warning">Thank you for your order, {{ name }}!</h3>
+      <p class="text-muted mt-3">You will receive your order within 10 days.</p>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6 offset-md-3">
+      <form id="feedback-form" method="POST">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="rating">How would you rate your experience?</label>
+          <select name="rating" id="rating" class="form-control">
+            <option value="1">1 (Poor)</option>
+            <option value="2">2 (Fair)</option>
+            <option value="3">3 (Good)</option>
+            <option value="4">4 (Very good)</option>
+            <option value="5">5 (Excellent)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="feedback">Please leave us some feedback:</label>
+          <textarea name="feedback" id="feedback" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group text-center">
+          <button type="submit" class="btn btn-primary" onclick="showPopup()">Submit Feedback</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script>
+function showPopup(event) {
+  event.preventDefault();
+
+  const rating = document.querySelector('#rating').value;
+  const feedback = document.querySelector('#feedback').value;
+
+  if (rating && feedback) {
+    const message = `Thank you for your feedback!\n\nYou rated us ${rating} out of 5 stars.\n\nWe appreciate your input and will use it to improve our service.`;
+    alert(message);
+
+    // Send feedback data to Django view using AJAX
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    fetch('/submit-feedback/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({
+        rating: rating,
+        feedback: feedback
+      })
+    });
+
+  } else {
+    alert('Please provide both a rating and feedback before submitting.');
+  }
+}
+
+document.querySelector('#feedback-form').addEventListener('submit', showPopup);
+
+
+</script>
+
+{% endblock %}
